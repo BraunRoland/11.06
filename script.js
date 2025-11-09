@@ -94,6 +94,7 @@ function mozgatasOldalra(balKockaId, jobbKockaId)
 
 async function egyszeru(sor)
 { 
+    document.getElementById(sor/10).disabled = true;
     let lista= [];
     for ( let i = 0; i < 5; i++)
     {
@@ -137,6 +138,62 @@ async function egyszeru(sor)
     }
     document.getElementById(lista[lista.length-1].id).style.backgroundColor = "orange";
 }
+
+async function bubbleSort(sor)
+{
+    document.getElementById(sor/10).disabled = true;
+    let lista= [];
+    for ( let i = 0; i < 5; i++)
+    {
+        const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
+        lista.push(obj);
+    }
+
+    for (let i = lista.length - 1; i > 0; i--)
+    {
+        for (let j = 0; j < i; j++)
+        {
+            document.getElementById(lista[j].id).style.backgroundColor = "green";
+            document.getElementById(lista[j+1].id).style.backgroundColor = "green";
+            await sleep(1000);
+            if(lista[j].szam > lista[j+1].szam)
+            {
+                mozgatasFel(lista[j].id)
+                mozgatasLe(lista[j+1].id)
+                await sleep(1500);
+                mozgatasOldalra(lista[j].id,lista[j+1].id);
+                await sleep(1500);
+                mozgatasLe(lista[j].id);
+                mozgatasFel(lista[j+1].id);
+                await sleep(1500);
+                let csere = lista[j+1];
+                lista[j+1] = lista[j];
+                lista[j] = csere;
+            }
+            document.getElementById(lista[j].id).style.backgroundColor = "cyan";
+            document.getElementById(lista[j+1].id).style.backgroundColor = "cyan";
+        }
+        document.getElementById(lista[i].id).style.backgroundColor = "orange";
+    }
+    document.getElementById(lista[0].id).style.backgroundColor = "orange";
+}
+
+/*
+            int[] t = { 12, 5, 7, 9, 4, 30 };
+
+            for (int i = t.Length - 1; i > 0; i--)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (t[j] > t[j + 1])
+                    {
+                        int tmp = t[j + 1];
+                        t[j + 1] = t[j];
+                        t[j] = tmp;
+                    }
+                }
+            } 
+*/
 
 const rendezes = () =>
 {
