@@ -250,9 +250,9 @@ async function quickSort(also, felso, lista)
     console.log(lista);
 }
 
-async function insertionSort(params) 
+async function insertionSort(sor) 
 {
-    
+    console.log(sor);
 }
 
 const rendezes = () =>
