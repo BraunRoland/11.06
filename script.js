@@ -95,7 +95,7 @@ function mozgatasOldalra(balKockaId, jobbKockaId)
 async function egyszeru(sor)
 { 
     document.getElementById(sor/10).disabled = true;
-    let lista= [];
+    const lista= [];
     for ( let i = 0; i < 5; i++)
     {
         const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
@@ -142,7 +142,7 @@ async function egyszeru(sor)
 async function bubbleSort(sor)
 {
     document.getElementById(sor/10).disabled = true;
-    let lista= [];
+    const lista= [];
     for ( let i = 0; i < 5; i++)
     {
         const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
@@ -178,22 +178,78 @@ async function bubbleSort(sor)
     document.getElementById(lista[0].id).style.backgroundColor = "orange";
 }
 
-/*
-            int[] t = { 12, 5, 7, 9, 4, 30 };
+function quickSort_btn(sor)
+{
+    document.getElementById(sor/10).disabled = true;
+    const lista= [];
+    for ( let i = 0; i < 5; i++)
+    {
+        const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
+        lista.push(obj);
+    }
 
-            for (int i = t.Length - 1; i > 0; i--)
+    console.log(lista);
+    quickSort(0,lista.length-1, lista);
+}
+
+
+async function quickSort(also, felso, lista) 
+{
+    let i = also;
+    let j = felso;
+    let kozep = lista[Math.floor((felso + also) / 2)];
+    document.getElementById(kozep.id).style.backgroundColor = "purple";
+
+    while (also <= felso)
+    {
+        while ( also < j && lista[also].szam < kozep.szam)
+        {
+            also++;
+        }
+        while (felso > i && lista[felso].szam > kozep.szam)
+        {
+            felso--;
+        }
+        if (also <= felso)
+        {
+            if( also != felso)
             {
-                for (int j = 0; j < i; j++)
-                {
-                    if (t[j] > t[j + 1])
-                    {
-                        int tmp = t[j + 1];
-                        t[j + 1] = t[j];
-                        t[j] = tmp;
-                    }
-                }
-            } 
-*/
+                document.getElementById(lista[also].id).style.backgroundColor = "red";
+                document.getElementById(lista[felso].id).style.backgroundColor = "red";
+                mozgatasFel(lista[also].id);
+                mozgatasLe(lista[felso].id);
+                await sleep(2000);
+                mozgatasOldalra(lista[also].id,lista[felso].id);
+                await sleep(2000);
+                mozgatasLe(lista[also].id);
+                mozgatasFel(lista[felso].id);
+                await sleep(2000);
+                document.getElementById(lista[also].id).style.backgroundColor = "cyan";
+                document.getElementById(lista[felso].id).style.backgroundColor = "cyan";
+
+                let csere = lista[also];
+                lista[also] = lista[felso];
+                lista[felso] = csere;
+            }
+            ++also;
+            --felso;
+        }
+    }
+    document.getElementById(kozep.id).style.backgroundColor = "cyan";
+    if (also < j)
+    {
+        await quickSort(also, j, lista);
+    }
+    if (felso > i)
+    {
+       await quickSort(i, felso, lista);
+    }
+
+    lista.forEach(e =>{
+        document.getElementById(e.id).style.backgroundColor = "orange";
+    })
+    console.log(lista);
+}
 
 const rendezes = () =>
 {
@@ -223,7 +279,7 @@ function sleep(ms)
 function init()    
 {
     //rendezes();
-    randomSzam(10)
+    randomSzam(10);
     randomSzam(20);
     randomSzam(30);
     //helyMeghatarozas();
