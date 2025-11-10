@@ -1,4 +1,14 @@
-
+function listaKeszites(sor)
+{
+    document.getElementById(sor/10).disabled = true;
+    const lista= [];
+    for ( let i = 0; i < 5; i++)
+    {
+        const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
+        lista.push(obj);
+    }
+    return lista;
+}
 
 function helyMeghatarozas()
 {
@@ -94,13 +104,8 @@ function mozgatasOldalra(balKockaId, jobbKockaId)
 
 async function egyszeru(sor)
 { 
-    document.getElementById(sor/10).disabled = true;
-    const lista= [];
-    for ( let i = 0; i < 5; i++)
-    {
-        const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
-        lista.push(obj);
-    }
+    let lista = listaKeszites(sor);
+    console.log(`Egyszerű: `);
     console.log(lista);
 
     for (let i = 0; i < lista.length-1; i++)
@@ -137,18 +142,15 @@ async function egyszeru(sor)
         alapKocka.style.backgroundColor = "orange";
     }
     document.getElementById(lista[lista.length-1].id).style.backgroundColor = "orange";
+    console.log(`Egyszerű(rendezett): `);
+    console.log(lista);
 }
 
 async function bubbleSort(sor)
 {
-    document.getElementById(sor/10).disabled = true;
-    const lista= [];
-    for ( let i = 0; i < 5; i++)
-    {
-        const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
-        lista.push(obj);
-    }
-
+    let lista = listaKeszites(sor);
+    console.log(`bubble sort: `);
+    console.log(lista);
     for (let i = lista.length - 1; i > 0; i--)
     {
         for (let j = 0; j < i; j++)
@@ -176,25 +178,21 @@ async function bubbleSort(sor)
         document.getElementById(lista[i].id).style.backgroundColor = "orange";
     }
     document.getElementById(lista[0].id).style.backgroundColor = "orange";
+    console.log(`bubble sort(rendezett): `);
+    console.log(lista);
 }
 
-function quickSort_btn(sor)
+async function quickSort_btn(sor)
 {
-    document.getElementById(sor/10).disabled = true;
-    const lista= [];
-    for ( let i = 0; i < 5; i++)
-    {
-        const obj = {id: sor+i, szam: parseInt(document.getElementById(`${sor+i}`).innerText)}
-        lista.push(obj);
-    }
-
-    console.log(lista);
+    let lista = listaKeszites(sor);
     quickSort(0,lista.length-1, lista);
 }
 
 
 async function quickSort(also, felso, lista) 
 {
+    console.log(`quick Sort: `);
+    console.log(lista);
     let i = also;
     let j = felso;
     let kozep = lista[Math.floor((felso + also) / 2)];
@@ -248,7 +246,13 @@ async function quickSort(also, felso, lista)
     lista.forEach(e =>{
         document.getElementById(e.id).style.backgroundColor = "orange";
     })
+    console.log(`quick Sort(rendezett): `);
     console.log(lista);
+}
+
+async function insertionSort(params) 
+{
+    
 }
 
 const rendezes = () =>
@@ -287,11 +291,11 @@ function init()
 
 document.addEventListener("DOMContentLoaded",init);
 
-//ezt ChatGPT csinálta
+//ezt ChatGPT csinálta, emiatt vannak középen a négyzetek
 window.onload = function() {
   document.querySelectorAll('.anim-div').forEach(div => {
     const boxes = div.querySelectorAll('.anim');
-    const boxWidth = 75; // ugyanaz, mint a CSS-ben
+    const boxWidth = 75;
     const boxHeight = 75;
     const gap = 15;
     const totalWidth = boxes.length * (boxWidth + gap) - gap;
