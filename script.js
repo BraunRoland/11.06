@@ -29,77 +29,144 @@ function randomSzam(id)
 
 function mozgatasFel(kocka)
 {
-    let negyzet = document.getElementById(kocka);
-    let id = null;
-    let pos = negyzet.offsetTop;
-    let kezd = pos
-    clearInterval(id);
-    id = setInterval(frame,5);
-    function frame()
+    return new Promise(resolve =>
     {
-        console.log("pos: "+pos);
-        if (pos == kezd-200)
+
+        let negyzet = document.getElementById(kocka);
+        let id = null;
+        let pos = negyzet.offsetTop;
+        let kezd = pos
+        clearInterval(id);
+        id = setInterval(frame,5);
+        function frame()
         {
-            clearInterval(id);
+            //console.log("pos: "+pos);
+            if (pos == kezd-200)
+            {
+                clearInterval(id);
+                resolve();
+            }
+            else
+            {
+                pos--;
+                negyzet.style.top = pos+"px";
+            }
         }
-        else
-        {
-            pos--;
-            negyzet.style.top = pos+"px";
-        }
-    }
+    });
 }
 
 function mozgatasLe(kocka)
 {
-    let negyzet = document.getElementById(kocka);
-    let id = null;
-    let pos = negyzet.offsetTop;
-    let kezd = pos
-    clearInterval(id);
-    id = setInterval(frame,5);
-    function frame()
+    return new Promise(resolve => 
     {
-        console.log("pos: "+pos);
-        if (pos == kezd+200)
+        let negyzet = document.getElementById(kocka);
+        let id = null;
+        let pos = negyzet.offsetTop;
+        let kezd = pos
+        clearInterval(id);
+        id = setInterval(frame,5);
+        function frame()
         {
-            clearInterval(id);
+            //console.log("pos: "+pos);
+            if (pos == kezd+200)
+            {
+                clearInterval(id);
+                resolve();
+            }
+            else
+            {
+                pos++;
+                negyzet.style.top = pos+"px";
+            }
         }
-        else
-        {
-            pos++;
-            negyzet.style.top = pos+"px";
-        }
-    }
+    });
 }
 
 
 function mozgatasOldalra(balKockaId, jobbKockaId)
 {
-    let balKocka = document.getElementById(balKockaId);
-    let jobbKocka = document.getElementById(jobbKockaId);
-    let id = null;
-    let balPos = balKocka.offsetLeft;
-    let jobbPos = jobbKocka.offsetLeft;
-    let balKezd = balPos;
-    let jobbKezd = jobbPos;
-    clearInterval(id);
-    id = setInterval(frame,5);
-    function frame()
+    return new Promise(resolve => 
     {
-        if (balPos == jobbKezd && jobbPos == balKezd)
+        let balKocka = document.getElementById(balKockaId);
+        let jobbKocka = document.getElementById(jobbKockaId);
+        let id = null;
+        let balPos = balKocka.offsetLeft;
+        let jobbPos = jobbKocka.offsetLeft;
+        let balKezd = balPos;
+        let jobbKezd = jobbPos;
+        clearInterval(id);
+        id = setInterval(frame,5);
+        function frame()
         {
-            clearInterval(id);
+            if (balPos == jobbKezd && jobbPos == balKezd)
+            {
+                clearInterval(id);
+                resolve();
+            }
+            else
+            {
+                balPos++;
+                jobbPos--;
+                balKocka.style.left = balPos+"px";
+                jobbKocka.style.left = jobbPos+"px";
+                //console.log(`bal: ${balKocka.style.left} jobb: ${jobbKocka.style.left}`)
+            }
         }
-        else
+    });
+}
+
+async function mozgatasBalra(kocka,koviKocka) 
+{
+    return new Promise(resolve =>
+    {
+        let negyzet = document.getElementById(kocka);
+        let id = null;
+        let pos = negyzet.offsetLeft;
+        let kezd = pos
+        clearInterval(id);
+        id = setInterval(frame,5);
+        function frame()
         {
-            balPos++;
-            jobbPos--;
-            balKocka.style.left = balPos+"px";
-            jobbKocka.style.left = jobbPos+"px";
-            console.log(`bal: ${balKocka.style.left} jobb: ${jobbKocka.style.left}`)
+            //console.log("pos: "+pos);
+            if (pos == kezd-90)
+            {
+                clearInterval(id);
+                resolve();
+            }
+            else
+            {
+                pos--;
+                negyzet.style.left = pos+"px";
+            }
         }
-    } 
+    });
+}
+
+async function mozgatasJobbra(kocka,koviKocka) 
+{
+    return new Promise(resolve =>
+    {
+        let negyzet = document.getElementById(kocka);
+        let id = null;
+        let pos = negyzet.offsetLeft;
+        let kezd = pos
+        clearInterval(id);
+        id = setInterval(frame,5);
+        function frame()
+        {
+            //console.log("pos: "+pos);
+            if (pos == kezd+90)
+            {
+                clearInterval(id);
+                resolve();
+            }
+            else
+            {
+                pos++;
+                negyzet.style.left = pos+"px";
+            }
+        }
+    });
 }
 
 async function egyszeru(sor)
@@ -252,7 +319,72 @@ async function quickSort(also, felso, lista)
 
 async function insertionSort(sor) 
 {
-    console.log(sor);
+    let p= "";
+    let lista = listaKeszites(sor);
+    
+    p += "eredeti: \n";
+    lista.forEach(e =>
+    {
+        p += (`\tid: ${e.id} | szám: ${e.szam}\n`)
+    })
+
+    for (let i = 0; i<lista.length; i++)
+    {   
+        let nezettId = lista[i].id;
+        let nezett = document.getElementById(nezettId);
+        let jobbPos = nezett.offsetLeft;
+        
+        let nagyobbId;
+        let nagyobb;
+        let balPos;
+        
+        let szamlalo = 0;
+        let j;
+
+        nezett.style.backgroundColor = "green";
+        let csere = lista[i];
+        await sleep(1000);
+        for (j = i-1; j >= 0 && lista[j].szam > csere.szam; j--)
+        {
+            if(szamlalo == 0)
+            {
+                await mozgatasFel(nezettId);
+                await sleep(1500);
+            }
+            szamlalo++;
+
+            nagyobbId = lista[j].id;
+            nagyobb = document.getElementById(nagyobbId);
+            nagyobb.style.backgroundColor = "red";
+            balPos = nagyobb.offsetLeft;
+
+            console.log(`id: ${nagyobbId} | szám: ${lista[j].szam}`)
+            await mozgatasBalra(nezettId, balPos);
+            await sleep(1500);
+            lista[j+1] = lista[j];
+            await mozgatasJobbra(nagyobbId, jobbPos);
+            await sleep(1500);
+        }
+        p += `(${i}): \n`;
+        lista.forEach(e =>
+        {
+            p += (`\tid: ${e.id} | szám: ${e.szam}\n`)
+        });
+        console.log(p);
+        if(i != 0 && szamlalo != 0)
+            {
+                //console.log("balpos: " + balPos);
+                await mozgatasLe(nezettId);
+                await sleep(1500);
+            }
+            lista[j+1] = csere
+        for (k = 0; k < i+1; k++)
+        {
+            document.getElementById(lista[k].id).style.backgroundColor = "orange";
+        }
+    }
+    console.log("Insertion(rendezett): ")
+    console.log(lista);
 }
 
 const rendezes = () =>
@@ -286,6 +418,8 @@ function init()
     randomSzam(10);
     randomSzam(20);
     randomSzam(30);
+    randomSzam(40);
+    randomSzam(50);
     //helyMeghatarozas();
 }
 
