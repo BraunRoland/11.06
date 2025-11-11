@@ -169,6 +169,11 @@ async function mozgatasJobbra(kocka,koviKocka)
     });
 }
 
+async function mozgatasRadixLe()
+{
+    
+}
+
 async function egyszeru(sor)
 { 
     let lista = listaKeszites(sor);
@@ -380,20 +385,60 @@ async function radixSort(sor)
     let lista = listaKeszites(sor);
     let maxCount = mostDigits(lista);
 
+    let kockakHelye = 
+    {
+        top: document.getElementById(sor).offsetTop,
+        left: []
+    }
+    for (let i = 0; i < 5; i++)
+    {
+        let szam = document.getElementById(sor+i).offsetLeft;
+        kockakHelye.left.push(szam);
+    }
+
     let bucket = 
     {
         top: document.getElementById("k0").offsetTop,
         szamok: []
     };
-
     for(let i = 0; i < 10; i++)
     {
         let obj ={id: `k${i}`, szam: parseInt(document.getElementById(`k${i}`).innerText), left: document.getElementById(`k${i}`).offsetLeft};
         bucket.szamok.push(obj);
     }
-
+    
     console.log(lista);
     console.log(bucket);
+    console.log(kockakHelye);
+    console.log(maxCount);
+
+    let kockak = document.querySelectorAll(".r");
+        
+    kockak.forEach(async e => 
+    {
+        let text = e.textContent.trim();
+        let elsoresz;
+        let vege;
+        let piros;
+        let hossz = text.length
+        for (let i = 0; i < hossz; i++)
+        {
+            const pirosI = hossz - 1 - i;
+            const eleje = text.slice(0,pirosI);
+            const piros = text[pirosI]
+            const vege = text.slice(pirosI+1);
+            e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`
+            await sleep(10000);
+        }
+        for (const e of kockak)
+        {
+            szam = parseInt(piros)
+        }
+
+
+        await sleep(1000);
+        e.textContent = text;
+    })
 }
 
 /*
@@ -429,7 +474,7 @@ function mostDigits(szamokLista)
     let maxDigits = 0;
     for(let i = 0; i < szamokLista.length; i++)
     {
-        maxDigits = Math.max(maxDigits, digitCount(szamokLista[i]));
+        maxDigits = Math.max(maxDigits, digitCount(szamokLista[i].szam));
     }
     return maxDigits;
 }
