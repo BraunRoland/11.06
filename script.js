@@ -378,8 +378,35 @@ async function insertionSort(sor)
 async function radixSort(sor) 
 {
     let lista = listaKeszites(sor);
+    let maxCount = mostDigits(lista);
 
+    let bucket = 
+    {
+        top: document.getElementById("k0").offsetTop,
+        szamok: []
+    };
+
+    for(let i = 0; i < 10; i++)
+    {
+        let obj ={id: `k${i}`, szam: parseInt(document.getElementById(`k${i}`).innerText), left: document.getElementById(`k${i}`).offsetLeft};
+        bucket.szamok.push(obj);
+    }
+
+    console.log(lista);
+    console.log(bucket);
 }
+
+/*
+    bucket = 
+    {
+        top: px
+        szamok: 
+        {
+            szam: value
+            left: px
+        }    
+    }
+*/
 
 //seged funkciók a radixSorthoz:
 
@@ -402,7 +429,7 @@ function mostDigits(szamokLista)
     let maxDigits = 0;
     for(let i = 0; i < szamokLista.length; i++)
     {
-        maxDigits = Math.max(maxDigits, digitCount(szamokLista[lista]));
+        maxDigits = Math.max(maxDigits, digitCount(szamokLista[i]));
     }
     return maxDigits;
 }
@@ -443,19 +470,19 @@ window.onload = function() {
     });
   });
 
-    document.querySelectorAll('.bucket').forEach(div => {
-    const boxes = div.querySelectorAll('.anim');
-    const boxWidth = 75;
-    const boxHeight = 75;
-    const gap = 15;
-    const totalWidth = boxes.length * (boxWidth + gap) - gap;
+//    document.querySelectorAll('.anim-div').forEach(div => {
+//    const boxes = div.querySelectorAll('.bucket');
+//    const boxWidth = 75;
+//    const boxHeight = 75;
+//    const gap = 15;
+//    const totalWidth = boxes.length * (boxWidth + gap) - gap;
     
-    const startLeft = (div.offsetWidth - totalWidth) / 2;
-    const startTop = (div.offsetHeight - boxHeight) / 2;
+//    const startLeft = (div.offsetWidth - totalWidth) / 2;
+//    const startTop = (div.offsetHeight - boxHeight) / 2;
 
-    boxes.forEach((box, i) => {
-      box.style.left = (startLeft + i * (boxWidth + gap)) + "px";
-      box.style.top = startTop + "px";
-    });
-  });
+//    boxes.forEach((box, i) => {
+//      box.style.left = (startLeft + i * (boxWidth + gap)) + "px";
+//      box.style.top = startTop + "px";
+//    });
+//  });
 };
