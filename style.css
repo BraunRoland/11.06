@@ -25,7 +25,16 @@ footer{
     padding-top: 250px;
 }
 
-
+.bucket{
+    margin-top: 300px;
+    width: 75px;
+    height: 2px;
+    background-color: rgb(216, 45, 45);
+    display: inline-block;
+    /*position: absolute;*/
+    text-align: center;
+    
+}
 
 .anim{
     width: 75px;

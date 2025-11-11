@@ -18,12 +18,12 @@ function helyMeghatarozas()
     console.log(hely.top);
 }
 
-function randomSzam(id)
+function randomSzam(id, maxSzam)
 {
     for (let i = 0; i < 5; i++)
         {
             let kocka = document.getElementById(id+i);
-            kocka.innerText = Math.floor(Math.random() * 101);
+            kocka.innerText = Math.floor(Math.random() * maxSzam);
         }
 }
 
@@ -319,14 +319,8 @@ async function quickSort(also, felso, lista)
 
 async function insertionSort(sor) 
 {
-    let p= "";
     let lista = listaKeszites(sor);
     
-    p += "eredeti: \n";
-    lista.forEach(e =>
-    {
-        p += (`\tid: ${e.id} | szám: ${e.szam}\n`)
-    })
 
     for (let i = 0; i<lista.length; i++)
     {   
@@ -361,16 +355,10 @@ async function insertionSort(sor)
             console.log(`id: ${nagyobbId} | szám: ${lista[j].szam}`)
             await mozgatasBalra(nezettId, balPos);
             await sleep(1500);
-            lista[j+1] = lista[j];
             await mozgatasJobbra(nagyobbId, jobbPos);
             await sleep(1500);
+            lista[j+1] = lista[j];
         }
-        p += `(${i}): \n`;
-        lista.forEach(e =>
-        {
-            p += (`\tid: ${e.id} | szám: ${e.szam}\n`)
-        });
-        console.log(p);
         if(i != 0 && szamlalo != 0)
             {
                 //console.log("balpos: " + balPos);
@@ -387,24 +375,36 @@ async function insertionSort(sor)
     console.log(lista);
 }
 
-const rendezes = () =>
+async function radixSort(sor) 
 {
-    let lista = [12,5,7,9,4,30];
-    console.log("kezdés: " + lista);
-    for (let i = 0; i < lista.length-1; i++)
+    let lista = listaKeszites(sor);
+
+}
+
+//seged funkciók a radixSorthoz:
+
+function getDigit(szam, hely)
+{
+    return Math.floor(Math.abs(szam) / Math.pow(10, hely)) % 10
+}
+
+function digitCount(szam)
+{
+    if (szam == 0)
     {
-        for (let j = i+1; j< lista.length; j++)
-        {
-            if (lista[i] > lista[j])
-            {
-                let csere = lista[i];
-                lista[i] = lista[j];
-                lista[j] = csere;
-                console.log(lista);
-            }
-        }
+        return 1;
     }
-    console.log("vége: "+ lista);
+    return Math.floor(Math.log10(Math.abs(szam))) + 1;
+}
+
+function mostDigits(szamokLista)
+{
+    let maxDigits = 0;
+    for(let i = 0; i < szamokLista.length; i++)
+    {
+        maxDigits = Math.max(maxDigits, digitCount(szamokLista[lista]));
+    }
+    return maxDigits;
 }
 
 function sleep(ms)
@@ -415,11 +415,11 @@ function sleep(ms)
 function init()    
 {
     //rendezes();
-    randomSzam(10);
-    randomSzam(20);
-    randomSzam(30);
-    randomSzam(40);
-    randomSzam(50);
+    randomSzam(10,101);
+    randomSzam(20,101);
+    randomSzam(30,101);
+    randomSzam(40,101);
+    randomSzam(50,2001);
     //helyMeghatarozas();
 }
 
@@ -428,6 +428,22 @@ document.addEventListener("DOMContentLoaded",init);
 //ezt ChatGPT csinálta, emiatt vannak középen a négyzetek
 window.onload = function() {
   document.querySelectorAll('.anim-div').forEach(div => {
+    const boxes = div.querySelectorAll('.anim');
+    const boxWidth = 75;
+    const boxHeight = 75;
+    const gap = 15;
+    const totalWidth = boxes.length * (boxWidth + gap) - gap;
+    
+    const startLeft = (div.offsetWidth - totalWidth) / 2;
+    const startTop = (div.offsetHeight - boxHeight) / 2;
+
+    boxes.forEach((box, i) => {
+      box.style.left = (startLeft + i * (boxWidth + gap)) + "px";
+      box.style.top = startTop + "px";
+    });
+  });
+
+    document.querySelectorAll('.bucket').forEach(div => {
     const boxes = div.querySelectorAll('.anim');
     const boxWidth = 75;
     const boxHeight = 75;
