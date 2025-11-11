@@ -169,9 +169,13 @@ async function mozgatasJobbra(kocka,koviKocka)
     });
 }
 
-async function mozgatasRadixLe()
+async function mozgatasRadixLe(kocka, hanyadik)
 {
-    
+    return new Promise(resolve =>
+    {
+        let negyzet = document.getElementById(kocka);
+        let id = null;
+    })
 }
 
 async function egyszeru(sor)
