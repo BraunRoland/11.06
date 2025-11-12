@@ -364,7 +364,7 @@ async function insertionSort(sor)
     console.log(lista);
 }
 
-function radixBal(negyzetId, vonalId, balra) 
+function radixBal(negyzetId, vonalId, balra, db) 
 {
     return new Promise(resolve => 
     {
@@ -375,6 +375,7 @@ function radixBal(negyzetId, vonalId, balra)
         let yPos = negyzet.offsetTop;
         let x = false;
         let y = false;
+        let hanyadik = db*85;
         clearInterval(id);
         id = setInterval(frame, 5);
         function frame() 
@@ -396,7 +397,7 @@ function radixBal(negyzetId, vonalId, balra)
                 }
                 negyzet.style.left = xPos + "px";
             }
-            if (yPos == vonal.offsetTop - 85) 
+            if (yPos == vonal.offsetTop - hanyadik - 85) 
             {
                 y = true;
             }
@@ -423,7 +424,7 @@ function radixLe(negyzetId,vonalId, db)
         let vonal = document.getElementById(vonalId);
         let id = null;
         let pos = negyzet.offsetTop;
-        let hanyadik = db*10
+        let hanyadik = db*85
         clearInterval(id);
         id = setInterval(frame, 5);
         function frame() 
@@ -452,24 +453,17 @@ async function radixMozgatas(negyzetId, vonalId, db)
     console.log(`négyzet(bal): ${negyzet.offsetLeft}px | vonal(bal): ${vonal.offsetLeft}px`)
     if (negyzet.offsetLeft > vonal.offsetLeft)
     {
-        await radixBal(negyzetId,vonalId,true)
+        await radixBal(negyzetId,vonalId,true,db)
     }
     else if (negyzet.offsetLeft < vonal.offsetLeft)
     {
-        await radixBal(negyzetId,vonalId,false);
+        await radixBal(negyzetId,vonalId,false,db);
     }
     else
     {
-        await radixLe(negyzetId,vonalId);
+        await radixLe(negyzetId,vonalId,db);
     }
     
-}
-
-async function gyak() 
-{
-    radixMozgatas("50","k0");
-    await sleep(5000);
-    radixMozgatas("51","k9");
 }
 
 async function radixSort(sor) 
@@ -500,7 +494,6 @@ async function radixSort(sor)
     let altLista = [];
     let altId;
     //ai, nem tudtam hogy kell csinálni
-    const szamok = Array.from(kockak).map(k => k.textContent.trim());
     const maxHossz = Math.max(...szamok.map(sz => sz.length));
 
     for (let poz = 0; poz < maxHossz;poz++)
@@ -560,9 +553,10 @@ async function radixSort(sor)
             for (let szId = 0; szId < a.szam.length; szId++)
             {
                 let sz = a.szam[szId];
+                a.db
                 console.log(a.db);
                 await radixMozgatas(a.id[szId],`k${aId}`, a.db);
-                a.db++;
+                a.db += 1;
             }
         }
         //bucket.szamok.forEach((a,aId) =>
