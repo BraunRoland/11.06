@@ -444,7 +444,9 @@ function radixLe(negyzetId,vonalId)
 async function radixMozgatas(negyzetId, vonalId) 
 {
     let negyzet = document.getElementById(negyzetId);
+    console.log(negyzet+" | "+ negyzetId)
     let vonal = document.getElementById(vonalId);
+    console.log(vonal +" | "+ vonalId)
     console.log(`négyzet(bal): ${negyzet.offsetLeft}px | vonal(bal): ${vonal.offsetLeft}px`)
     if (negyzet.offsetLeft > vonal.offsetLeft)
     {
@@ -492,13 +494,17 @@ async function radixSort(sor)
     let kockak = document.querySelectorAll(".r");
     let pirosI;
     let piros;
+    let bucket;
     let altLista = [];
+    let altId;
     //ai, nem tudtam hogy kell csinálni
     const szamok = Array.from(kockak).map(k => k.textContent.trim());
     const maxHossz = Math.max(...szamok.map(sz => sz.length));
 
     for (let poz = 0; poz < maxHossz;poz++)
     {
+        altLista = [];
+        altId = []
         index = -1-poz;
         //vonalak
         let bucket =
@@ -506,16 +512,16 @@ async function radixSort(sor)
             top: document.getElementById("k0").offsetTop,
             szamok: 
             [
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []},
-                {db: 0, id: []}
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []},
+                {db: 0, id: [], szam: []}
             ]
         };
         //szinezes
@@ -533,21 +539,44 @@ async function radixSort(sor)
             const vege = text.slice(pirosI+1);
             e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`;
             bucket.szamok[parseInt(piros)].id.push(e.id); 
+            bucket.szamok[parseInt(piros)].szam.push(parseInt(e.innerText)); 
             }
             else
             {
                 bucket.szamok[0].id.push(e.id);
+                bucket.szamok[0].szam.push(parseInt(e.innerText))
             }
         });
+
+        //feltolti a bucketot es külön listaba szedi a szamokat
         console.log(bucket.szamok);
         await sleep(5000);
+        bucket.szamok.forEach((a,aId) =>
+        {
+            a.szam.forEach(async (sz, szId)  => 
+            {
+                radixMozgatas(a.id[szId], `k${aId}`);
+                await sleep(4000);
+            })
+        });
+
+        //bucket.szamok.forEach(a =>
+        //{
+        //    a.szam.forEach(sz =>
+        //    {
+        //        altLista.push(sz);
+        //    });
+        //});
+        //console.log(altLista);
+        //await sleep(5000);
+
+
+        //levitel
+        for(let i = 0; i < kockak.length; i++)
+        {
+            radixMozgatas()
+        }
     }
-    for(let i = 0; i < bucket.szamok.length;i++)
-    {
-        altLista.push(bucket.szamok[i].szamok);
-    }
-    console.log(altLista);
-    await sleep(5000);
     
     //kockak.forEach(async e => 
     //{
