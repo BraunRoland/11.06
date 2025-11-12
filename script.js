@@ -473,6 +473,7 @@ async function radixSort(sor)
     let lista = listaKeszites(sor);
     let maxCount = mostDigits(lista);
 
+    // kezdő helye a négyzeteknek
     let kockakHelye =
     {
         top: document.getElementById(sor).offsetTop,
@@ -484,48 +485,111 @@ async function radixSort(sor)
         kockakHelye.left.push(szam);
     }
 
-    let bucket =
-    {
-        top: document.getElementById("k0").offsetTop,
-        szamok: []
-    };
-    for (let i = 0; i < 10; i++) 
-    {
-        let obj = { id: `k${i}`, szam: parseInt(document.getElementById(`k${i}`).innerText), left: document.getElementById(`k${i}`).offsetLeft };
-        bucket.szamok.push(obj);
-    }
-
     console.log(lista);
-    console.log(bucket);
     console.log(kockakHelye);
     console.log(maxCount);
 
     let kockak = document.querySelectorAll(".r");
+    let pirosI;
+    let piros;
+    let altLista = [];
+    //ai, nem tudtam hogy kell csinálni
+    const szamok = Array.from(kockak).map(k => k.textContent.trim());
+    const maxHossz = Math.max(...szamok.map(sz => sz.length));
 
-    kockak.forEach(async e => 
+    for (let poz = 0; poz < maxHossz;poz++)
     {
-        let text = e.textContent.trim();
-        let pirosI;
-        let piros;
-        let hossz = text.length
-        for (let i = 0; i < hossz; i++) 
+        index = -1-poz;
+        //vonalak
+        let bucket =
         {
-            pirosI = hossz - 1 - i;
-            const eleje = text.slice(0, pirosI);
-            piros = text[pirosI]
-            const vege = text.slice(pirosI + 1);
-            e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`
-            await sleep(1000);
-        }
-        for (const e of kockak) 
+            top: document.getElementById("k0").offsetTop,
+            szamok: 
+            [
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []},
+                {db: 0, id: []}
+            ]
+        };
+        //szinezes
+        kockak.forEach((e,i) =>
         {
-            szam = parseInt(piros)
-        }
+          let text = e.textContent.trim();  
+          let hossz = text.length;
+          let pirosI = hossz - 1 - poz;
+          let piros;
+        
+            if (pirosI >= 0)
+            {
+            const eleje = text.slice(0,pirosI);
+            piros = text[pirosI];
+            const vege = text.slice(pirosI+1);
+            e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`;
+            bucket.szamok[parseInt(piros)].id.push(e.id); 
+            }
+            else
+            {
+                bucket.szamok[0].id.push(e.id);
+            }
+        });
+        console.log(bucket.szamok);
+        await sleep(5000);
+    }
+    for(let i = 0; i < bucket.szamok.length;i++)
+    {
+        altLista.push(bucket.szamok[i].szamok);
+    }
+    console.log(altLista);
+    await sleep(5000);
+    
+    //kockak.forEach(async e => 
+    //{
+    //    let text = e.textContent.trim();
+    //    let hossz = text.length
+    //    for (let i = 0; i < hossz; i++) 
+    //    {
+    //        //vonalak
+            //let bucket =
+            //{
+            //    top: document.getElementById("k0").offsetTop,
+            //    szamok: 
+            //    [
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []},
+            //        {db: 0, id: []}
+            //    ]
+            //};
 
 
-        await sleep(1000);
-        e.textContent = text;
-    })
+    //        pirosI = hossz - 1 - i;
+    //        const eleje = text.slice(0, pirosI);
+    //        piros = parseInt(text[pirosI]);
+    //        const vege = text.slice(pirosI + 1);
+    //        e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`;
+    //        await sleep(1000);
+    //        bucket.szamok[piros].id.push(e)
+    //        console.log(bucket.szamok);
+    //        await sleep(20000);
+    //    }
+
+
+    //    await sleep(1000);
+    //    e.textContent = text;
+    //})
 }
 
 
