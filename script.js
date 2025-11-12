@@ -415,6 +415,82 @@ function radixBal(negyzetId, vonalId, balra, db)
     });
 }
 
+function radixFelOld(negyzetId, kockakHelye, balra, i) 
+{
+    return new Promise(resolve => 
+    {
+        let negyzet = document.getElementById(negyzetId);
+        let negyzetHelye = kockakHelye.left[i]
+        let id = null;
+        let xPos = negyzet.offsetLeft;
+        let yPos = negyzet.offsetTop;
+        let x = false;
+        let y = false;
+        clearInterval(id);
+        id = setInterval(frame, 5);
+        function frame() 
+        {
+            //console.log("pos: "+pos);
+            if (xPos == negyzetHelye) 
+            {
+                x = true;
+            }
+            else 
+            {
+                if (balra == true) 
+                {
+                    xPos--;
+                }
+                else 
+                {
+                    xPos++;
+                }
+                negyzet.style.left = xPos + "px";
+            }
+            if (yPos == kockakHelye.top) 
+            {
+                y = true;
+            }
+            else 
+            {
+                yPos--;
+                negyzet.style.top = yPos + "px";
+            }
+            if (x == true && y == true) 
+            {
+                clearInterval(id);
+                resolve();
+            }
+        }
+    });
+}
+
+function radixFel(negyzetId,kockakHelye, i) 
+{
+    return new Promise(resolve => 
+    {
+        let negyzet = document.getElementById(negyzetId);
+        let id = null;
+        let pos = negyzet.offsetTop;
+        clearInterval(id);
+        id = setInterval(frame, 5);
+        function frame() 
+        {
+            //console.log("pos: "+pos);
+            if (pos == kockakHelye.top) 
+            {
+                clearInterval(id);
+                resolve();
+            }
+            else 
+            {
+                pos--;
+                negyzet.style.top = pos + "px";
+            }
+        }
+    });
+}
+
 function radixLe(negyzetId,vonalId, db) 
 {
     return new Promise(resolve => 
@@ -466,6 +542,29 @@ async function radixMozgatas(negyzetId, vonalId, db)
     
 }
 
+
+
+async function radixMozgFel(negyzetId, kockakHelye, i) 
+{
+    let negyzetHelye = kockakHelye[i];
+    let negyzet = document.getElementById(negyzetId);
+    console.log("négyzet: "+ negyzet.offsetLeft);
+    console.log("kockakhelye: "+ kockakHelye);
+    console.log("offsetleft: "+ kockakHelye.left[i]);
+    if (negyzet.offsetLeft > kockakHelye.left[i])
+    {
+        await radixFelOld(negyzetId,kockakHelye,true,i);
+    }
+    else if (negyzet.offsetLeft < kockakHelye.left[i])
+    {
+        await radixFelOld(negyzetId,kockakHelye,false,i);
+    }
+    else
+    {
+        await radixFel(negyzetId, kockakHelye, i);
+    }    
+}
+
 async function radixSort(sor) 
 {
     let lista = listaKeszites(sor);
@@ -494,6 +593,7 @@ async function radixSort(sor)
     let altLista = [];
     let altId;
     //ai, nem tudtam hogy kell csinálni
+    const szamok = Array.from(kockak).map(k => k.textContent.trim());
     const maxHossz = Math.max(...szamok.map(sz => sz.length));
 
     for (let poz = 0; poz < maxHossz;poz++)
@@ -546,6 +646,9 @@ async function radixSort(sor)
         //levitel
         console.log(bucket.szamok);
         await sleep(5000);
+
+        
+        
         
         for (let aId = 0; aId < bucket.szamok.length; aId++)
         {
@@ -553,72 +656,27 @@ async function radixSort(sor)
             for (let szId = 0; szId < a.szam.length; szId++)
             {
                 let sz = a.szam[szId];
-                a.db
+                a.db;
                 console.log(a.db);
                 await radixMozgatas(a.id[szId],`k${aId}`, a.db);
-                a.db += 1;
+                bucket.szamok[aId].db++;
             }
         }
-        //bucket.szamok.forEach((a,aId) =>
-        //{
-        //    a.szam.forEach(async (sz, szId)  => 
-        //    {
-        //        await radixMozgatas(a.id[szId], `k${aId}`);
-        //    })
-        //});
 
-        //bucket.szamok.forEach(a =>
-        //{
-        //    a.szam.forEach(sz =>
-        //    {
-        //        altLista.push(sz);
-        //    });
-        //});
-        //console.log(altLista);
-        //await sleep(5000);
+        //felvitel
+        let i = 0;
+        for (let aId = 0; aId < bucket.szamok.length; aId++)
+        {
+            let a = bucket.szamok[aId];
+            for (let szId = 0; szId < a.szam.length; szId++)
+            {
+                let sz = a.szam[szId];
+                console.log("negyzetId:" + a.id[szId])
+                await radixMozgFel(a.id[szId], kockakHelye, i);
+                i++;
+            }
+        }
     }
-    
-    //kockak.forEach(async e => 
-    //{
-    //    let text = e.textContent.trim();
-    //    let hossz = text.length
-    //    for (let i = 0; i < hossz; i++) 
-    //    {
-    //        //vonalak
-            //let bucket =
-            //{
-            //    top: document.getElementById("k0").offsetTop,
-            //    szamok: 
-            //    [
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []},
-            //        {db: 0, id: []}
-            //    ]
-            //};
-
-
-    //        pirosI = hossz - 1 - i;
-    //        const eleje = text.slice(0, pirosI);
-    //        piros = parseInt(text[pirosI]);
-    //        const vege = text.slice(pirosI + 1);
-    //        e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`;
-    //        await sleep(1000);
-    //        bucket.szamok[piros].id.push(e)
-    //        console.log(bucket.szamok);
-    //        await sleep(20000);
-    //    }
-
-
-    //    await sleep(1000);
-    //    e.textContent = text;
-    //})
 }
 
 
