@@ -414,20 +414,22 @@ function radixBal(negyzetId, vonalId, balra)
     });
 }
 
-function radixLe(negyzetId,vonalId) 
+function radixLe(negyzetId,vonalId, db) 
 {
     return new Promise(resolve => 
     {
+        console.log(db);
         let negyzet = document.getElementById(negyzetId);
         let vonal = document.getElementById(vonalId);
         let id = null;
         let pos = negyzet.offsetTop;
+        let hanyadik = db*10
         clearInterval(id);
         id = setInterval(frame, 5);
         function frame() 
         {
             //console.log("pos: "+pos);
-            if (pos == vonal - 85) 
+            if (pos == vonal.offsetTop - hanyadik - 85) 
             {
                 clearInterval(id);
                 resolve();
@@ -441,7 +443,7 @@ function radixLe(negyzetId,vonalId)
     });
 }
 
-async function radixMozgatas(negyzetId, vonalId) 
+async function radixMozgatas(negyzetId, vonalId, db) 
 {
     let negyzet = document.getElementById(negyzetId);
     console.log(negyzet+" | "+ negyzetId)
@@ -548,17 +550,28 @@ async function radixSort(sor)
             }
         });
 
-        //feltolti a bucketot es külön listaba szedi a szamokat
+        //levitel
         console.log(bucket.szamok);
         await sleep(5000);
-        bucket.szamok.forEach((a,aId) =>
+        
+        for (let aId = 0; aId < bucket.szamok.length; aId++)
         {
-            a.szam.forEach(async (sz, szId)  => 
+            let a = bucket.szamok[aId];
+            for (let szId = 0; szId < a.szam.length; szId++)
             {
-                radixMozgatas(a.id[szId], `k${aId}`);
-                await sleep(4000);
-            })
-        });
+                let sz = a.szam[szId];
+                console.log(a.db);
+                await radixMozgatas(a.id[szId],`k${aId}`, a.db);
+                a.db++;
+            }
+        }
+        //bucket.szamok.forEach((a,aId) =>
+        //{
+        //    a.szam.forEach(async (sz, szId)  => 
+        //    {
+        //        await radixMozgatas(a.id[szId], `k${aId}`);
+        //    })
+        //});
 
         //bucket.szamok.forEach(a =>
         //{
@@ -569,13 +582,6 @@ async function radixSort(sor)
         //});
         //console.log(altLista);
         //await sleep(5000);
-
-
-        //levitel
-        for(let i = 0; i < kockak.length; i++)
-        {
-            radixMozgatas()
-        }
     }
     
     //kockak.forEach(async e => 
