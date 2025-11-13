@@ -244,7 +244,6 @@ async function quickSort_btn(sor)
     quickSort(0, lista.length - 1, lista);
 }
 
-
 async function quickSort(also, felso, lista) 
 {
     console.log(`quick Sort: `);
@@ -253,7 +252,7 @@ async function quickSort(also, felso, lista)
     let j = felso;
     let kozep = lista[Math.floor((felso + also) / 2)];
     document.getElementById(kozep.id).style.backgroundColor = "purple";
-
+    console.log(kozep);
     while (also <= felso) 
     {
         while (also < j && lista[also].szam < kozep.szam) 
