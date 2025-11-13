@@ -589,6 +589,7 @@ async function radixSort(sor)
     let kockak = document.querySelectorAll(".r");
     let pirosI;
     let piros;
+    let text;
     let bucket =
     {
         top: document.getElementById("k0").offsetTop,
@@ -656,39 +657,41 @@ async function radixSort(sor)
         };
         //szinezes
         console.log("IndexLista: " +indexLista)
-        kockak.forEach((e,i) =>
+
+        await sleep(1000);
+        for (let i = 0; i < indexLista.length; i++)
         {
-          let text = e.textContent.trim();  
-          let hossz = text.length;
-          let pirosI = hossz - 1 - poz;
-          let piros;
+            const e = document.getElementById(indexLista[i]);
+            text = e.textContent.trim();  
+            let hossz = text.length;
+            let pirosI = hossz - 1 - poz;
+            let piros;
         
             if (pirosI >= 0)
             {
-            const eleje = text.slice(0,pirosI);
-            piros = text[pirosI];
-            const vege = text.slice(pirosI+1);
-            e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`;
-            bucket.szamok[parseInt(piros)].id.push(e.id); 
-            bucket.szamok[parseInt(piros)].szam.push(parseInt(e.innerText)); 
+                const eleje = text.slice(0,pirosI);
+                piros = text[pirosI];
+                const vege = text.slice(pirosI+1);
+                e.innerHTML = `${eleje}<span style="color:red;">${piros}</span>${vege}`;
+                bucket.szamok[parseInt(piros)].id.push(e.id); 
+                bucket.szamok[parseInt(piros)].szam.push(parseInt(e.innerText)); 
             }
             else
             {
                 bucket.szamok[0].id.push(e.id);
                 bucket.szamok[0].szam.push(parseInt(e.innerText))
             }
-        });
+
+        }
 
         //levitel
         console.log(bucket.szamok);
-        await sleep(5000);
 
         let ind = bucket.szamok.findIndex(obj => obj.id.includes("50"));
         console.log(ind);
         let keresett = bucket.szamok[ind];
         console.log(keresett);
         console.log(indexLista);
-        await sleep(3000);
 
         for (let i = 0; i < indexLista.length; i++)
         {
@@ -699,10 +702,9 @@ async function radixSort(sor)
             await radixMozgatas(indexLista[i],`k${ind}`,keresett.db);
             bucket.szamok[ind].db++;
         }
-        
+        await sleep(1000);
         
 
-        indexLista.splice(0,indexLista.length-1);
 
         //felvitel
         let i = 0;
@@ -716,6 +718,14 @@ async function radixSort(sor)
                 await radixMozgFel(a.id[szId], kockakHelye, i);
                 i++;
             }
+        }
+        await sleep(1000);
+        for (let i = 0; i < indexLista.length; i++)
+        {
+            let ind = bucket.szamok.findIndex(o => o.id.includes(String(indexLista[i])));
+            let obj = bucket.szamok[ind].id.indexOf(String(indexLista[i]));
+            console.log(`id: ${bucket.szamok[ind].id[obj]} | szám: ${bucket.szamok[ind].szam[obj]}`);
+            document.getElementById(indexLista[i]).innerText = bucket.szamok[ind].szam[obj];
         }
     }
 }
