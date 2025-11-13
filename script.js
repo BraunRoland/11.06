@@ -589,20 +589,55 @@ async function radixSort(sor)
     let kockak = document.querySelectorAll(".r");
     let pirosI;
     let piros;
-    let bucket;
+    let bucket =
+    {
+        top: document.getElementById("k0").offsetTop,
+        szamok: 
+        [
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []},
+            {db: 0, id: [], szam: []}
+        ]
+    };
     let altLista = [];
     let altId;
+    let indexLista= [];
+    for (i = 0; i<kockak.length;i++)
+    {
+        indexLista.push(`${sor+i}`)
+    }
+    console.log("IndexLista: " + indexLista)
     //ai, nem tudtam hogy kell csinálni
     const szamok = Array.from(kockak).map(k => k.textContent.trim());
     const maxHossz = Math.max(...szamok.map(sz => sz.length));
 
     for (let poz = 0; poz < maxHossz;poz++)
     {
+        index = -1-poz;
         altLista = [];
         altId = []
-        index = -1-poz;
-        //vonalak
-        let bucket =
+
+        //vonalak        
+        if(poz != 0)
+        {
+            indexLista = [];
+            for (let aId = 0; aId < bucket.szamok.length;aId++)
+            {
+                let a = bucket.szamok[aId];
+                for (let szId = 0; szId < a.szam.length;szId++)  
+                {
+                    indexLista.push(a.id[szId]);   
+                }
+            } 
+        }
+        bucket =
         {
             top: document.getElementById("k0").offsetTop,
             szamok: 
@@ -620,6 +655,7 @@ async function radixSort(sor)
             ]
         };
         //szinezes
+        console.log("IndexLista: " +indexLista)
         kockak.forEach((e,i) =>
         {
           let text = e.textContent.trim();  
@@ -647,21 +683,26 @@ async function radixSort(sor)
         console.log(bucket.szamok);
         await sleep(5000);
 
-        
-        
-        
-        for (let aId = 0; aId < bucket.szamok.length; aId++)
+        let ind = bucket.szamok.findIndex(obj => obj.id.includes("50"));
+        console.log(ind);
+        let keresett = bucket.szamok[ind];
+        console.log(keresett);
+        console.log(indexLista);
+        await sleep(3000);
+
+        for (let i = 0; i < indexLista.length; i++)
         {
-            let a = bucket.szamok[aId];
-            for (let szId = 0; szId < a.szam.length; szId++)
-            {
-                let sz = a.szam[szId];
-                a.db;
-                console.log(a.db);
-                await radixMozgatas(a.id[szId],`k${aId}`, a.db);
-                bucket.szamok[aId].db++;
-            }
+            let ind = bucket.szamok.findIndex(obj => obj.id.includes(`${indexLista[i]}`));
+            let keresett = bucket.szamok[ind];
+            console.log(indexLista[i])
+            console.log(ind);
+            await radixMozgatas(indexLista[i],`k${ind}`,keresett.db);
+            bucket.szamok[ind].db++;
         }
+        
+        
+
+        indexLista.splice(0,indexLista.length-1);
 
         //felvitel
         let i = 0;
