@@ -763,25 +763,27 @@ async function fajlBeolvasas()
         const nevek = ["egyszeru","bubble","quick","insertion","radix"]
         for (let i = 0; i < nevek.length; i++)
         {
+            const key = nevek[i]
             console.log(`${nevek[i]}: `)
             let response = await fetch(`./Algoritmus/bin/Debug/net8.0/${nevek[i]}.csv`)
             let text = await response.text();
             let lines = text.split("\n");
             lines.shift();
             lines.pop()
-            for (let i = 0; i < lines.length; i++)
+
+            rendezesek[key] = {};
+
+            for (let j = 0; j < lines.length; j++)
             {
-                console.log(`(${i}.): ${lines[i]}`)
-                let key = nevek[i]
-                rendezesek[nevek[i]] = {};
-                for (let j = 0; j < lines.length; j++)
-                {
-                    let segedLista = lines[j].split(";");
-                    
-                    let listaIdo = parseFloat(segedLista[1].replace(",","."));
-                    let tombIdo = parseFloat(segedLista[3].replace(",","."));                    
-                    rendezesek[key][parseFloat(segedLista[0])] = [listaIdo, tombIdo]
-                }
+                console.log(`(${j}.): ${lines[j]}`)
+                //rendezesek[key]
+                //let key = nevek[i]
+                //rendezesek[nevek[i]] = {};
+                let segedLista = lines[j].split(";");
+                
+                let listaIdo = parseFloat(segedLista[1].replace(",","."));
+                let tombIdo = parseFloat(segedLista[3].replace(",","."));                    
+                rendezesek[key][parseFloat(segedLista[0])] = [listaIdo, tombIdo]
             }
             
         }
@@ -836,26 +838,56 @@ rendezesek =
     },
 }
 */
-const Utils = 
-{
-    CHART_COLORS: {
-    red: 'rgb(250, 11, 63)',
-    orange: 'rgb(255, 159, 64)',
-    yellow: 'rgb(255, 205, 86)',
-    green: 'rgb(75, 192, 192)',
-    blue: 'rgb(54, 162, 235)',
-    purple: 'rgb(153, 102, 255)',
-    grey: 'rgb(201, 203, 207)'
-  },
-  transparentize: function(color, opacity) {
-    return color.replace('rgb(', 'rgba(').replace(')', `, ${1-opacity})`);
-  }
-};
+ const szinek = [""]
 
-function rajz()
+function canvasCsinalas()
 {
-    const ctx = document.getElementById('myChart');
-    const adat = rendezesek.egyszeru;
+    const kiiras = document.getElementById("canv");
+    for (let i = 0; i < 5; i++)
+    {
+        const canvas = document.createElement("canvas");
+        canvas.className = "myChart";
+        kiiras.appendChild(canvas);
+    }
+}
+
+const nevek = ["Egyszerű", "Buborékos", "Gyors rendezés", "Beillesztéses", "Radix"]
+//chatGPT generalt szinek
+const colors1 = [
+    "rgb(5, 151, 248)",    // kék
+    "rgb(250, 11, 63)",    // piros
+    "rgb(0, 200, 83)",     // zöld
+    "rgb(255, 193, 7)",    // sárga
+    "rgb(156, 39, 176)",   // lila
+    "rgb(255, 87, 34)",    // narancs
+    "rgb(33, 150, 243)",   // világoskék
+    "rgb(121, 85, 72)",    // barna
+    "rgb(255, 235, 59)",   // világos sárga
+    "rgb(233, 30, 99)"     // pink
+];
+
+const colors2 = [
+    "rgb(102, 204, 255)",   // világoskék
+    "rgb(255, 153, 153)",   // világos piros/rózsaszín
+    "rgb(102, 255, 178)",   // világos zöld
+    "rgb(255, 255, 153)",   // világos sárga
+    "rgb(178, 102, 255)",   // világos lila
+    "rgb(255, 178, 102)",   // világos narancs
+    "rgb(102, 178, 255)",   // világos kék
+    "rgb(204, 153, 102)",   // világos barna
+    "rgb(255, 255, 102)",   // világos sárga
+    "rgb(255, 102, 204)"    // világos pink
+];
+
+
+let szinindex = 0;
+
+function rajz(i)
+{
+    const ctx = document.getElementsByClassName('myChart')[i];
+    const algoritmusNev =  Object.keys(rendezesek)[i];
+    const adat = rendezesek[algoritmusNev];
+
     const labels = Object.keys(adat);
     const listaMs = labels.map(e => adat[e][0]);
     const tombMs = labels.map(e => adat[e][1]);
@@ -868,15 +900,17 @@ function rajz()
             {
                 label: "Lista Mérés(ms)",
                 data: listaMs,
-                backgroundColor: 'rgba(5, 151, 248, 1)'
+                backgroundColor: colors2[szinindex]
             },
             {
                 label: "Tömb mérés(ms)",
                 data: tombMs,
-                backgroundColor: 'rgb(250, 11, 63)'
+                backgroundColor: colors2[szinindex+1]
             }
         ]
     }
+
+    szinindex += 2;
 
     new Chart(ctx, 
     {
@@ -890,7 +924,7 @@ function rajz()
                 title:
                 {
                     display: true,
-                    text: "Egyszerű"
+                    text: nevek[i]
                 }
             },
             scales:
@@ -913,6 +947,32 @@ function rajz()
     });
 }
 
+function kozosRajz()
+{
+    const datasets = [];
+    let colorIndex =0;
+    const labels = Object.keys(adat);
+    for (let i = 0; i < nevek.length; i++)
+    {
+    const algoritmusNev =  Object.keys(rendezesek)[i];
+    const adat = rendezesek[algoritmusNev];
+    const listaMs = labels.map(e => adat[e][0]);
+    const tombMs = labels.map(e => adat[e][1]);
+
+    datasets.push(
+    {
+        label: nevek[i] +" (lista)",
+        datasets: listaMs,
+        backgroundColor: colors2[colorIndex],
+        fill: false,
+        tension: 0.2
+    });
+
+    colorIndex++;
+    d
+    }
+}
+
 async function init() {
     //rendezes();
     randomSzam(10, 101);
@@ -922,7 +982,11 @@ async function init() {
     randomSzam(50, 2001);
     await fajlBeolvasas();
     console.log(rendezesek);
-    rajz();
+    canvasCsinalas();
+    for (let i = 0; i < nevek.length;i++)
+    {
+        rajz(i);
+    }
     //helyMeghatarozas();
 }
 
