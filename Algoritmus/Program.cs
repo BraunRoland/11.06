@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text; 
 
 namespace Algoritmus
 {
@@ -299,7 +300,7 @@ namespace Algoritmus
         {
             for (int i = 0; i < fajlNevek.Length; i++)
             {
-            string path = fajlNevek[i] +".txt";
+            string path = fajlNevek[i].ToLower() +".csv";
             if (File.Exists(path))
             {
                 File.Delete(path);
@@ -309,7 +310,7 @@ namespace Algoritmus
 
         static void FileIras(bool boolean, string fajlNev, double[] meresek, int index)
         {
-            StreamWriter sw = new StreamWriter(fajlNev + ".txt", true);
+            StreamWriter sw = new StreamWriter(fajlNev + ".csv", true, Encoding.UTF8);
             if (boolean == true)
             {
                 sw.WriteLine("Lista elemek száma;Lista mérésének ideje(ms);Tömb elemek száma;Tömb mérésének ideje(ms)");
@@ -336,25 +337,25 @@ namespace Algoritmus
                 lista = Listafeltoltes(hossz[i]);
 
                 //Egyszerű rendezés
-                FileIras(boolean, fajlNevek[fajlIndex], SortEgyszeru(tomb, lista), i);
+                FileIras(boolean, fajlNevek[fajlIndex].ToLower(), SortEgyszeru(tomb, lista), i);
                 fajlIndex++;
 
                 //Buborékos rendezés
-                FileIras(boolean, fajlNevek[fajlIndex], SortBubble(tomb, lista), i);
+                FileIras(boolean, fajlNevek[fajlIndex].ToLower(), SortBubble(tomb, lista), i);
                 fajlIndex++;
 
                 //Gyors rendezés
-                FileIras(boolean, fajlNevek[fajlIndex], SortQuick(tomb, lista), i);
+                FileIras(boolean, fajlNevek[fajlIndex].ToLower(), SortQuick(tomb, lista), i);
                 fajlIndex++;
 
                 //Beillesztéses rendezés
-                FileIras(boolean, fajlNevek[fajlIndex], SortInsertion(tomb, lista), i);
+                FileIras(boolean, fajlNevek[fajlIndex].ToLower(), SortInsertion(tomb, lista), i);
                 fajlIndex++;
 
                 //Radix rendezés
-                FileIras(boolean, fajlNevek[fajlIndex], SortRadix(tomb, lista), i);
+                FileIras(boolean, fajlNevek[fajlIndex].ToLower(), SortRadix(tomb, lista), i);
                 boolean = false;
-            }
+            }   
         }
     }
 }
