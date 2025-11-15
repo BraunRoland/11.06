@@ -849,6 +849,9 @@ function canvasCsinalas()
         canvas.className = "myChart";
         kiiras.appendChild(canvas);
     }
+    const kozos = document.createElement("canvas");
+    kozos.setAttribute("id","kozos");
+    kiiras.appendChild(kozos);
 }
 
 const nevek = ["Egyszerű", "Buborékos", "Gyors rendezés", "Beillesztéses", "Radix"]
@@ -857,12 +860,12 @@ const colors1 = [
     "rgb(5, 151, 248)",    // kék
     "rgb(250, 11, 63)",    // piros
     "rgb(0, 200, 83)",     // zöld
-    "rgb(255, 193, 7)",    // sárga
-    "rgb(156, 39, 176)",   // lila
     "rgb(255, 87, 34)",    // narancs
-    "rgb(33, 150, 243)",   // világoskék
+    "rgb(156, 39, 176)",   // lila
+    "rgb(255, 193, 7)",    // sárga
+    "rgba(31, 7, 172, 1)",   // világoskék
     "rgb(121, 85, 72)",    // barna
-    "rgb(255, 235, 59)",   // világos sárga
+    "rgba(255, 163, 59, 1)",// világos sárga
     "rgb(233, 30, 99)"     // pink
 ];
 
@@ -949,28 +952,97 @@ function rajz(i)
 
 function kozosRajz()
 {
+    const allData = [];
+    for (let key of Object.keys(rendezesek)) {
+        const adat = rendezesek[key];
+        Object.values(adat).forEach(v => {
+            allData.push(v[0]); // lista
+            allData.push(v[1]); // tömb
+        });
+    }
+    const yMin = Math.max(Math.min(...allData) / 2, 0.001);
+    const yMax = Math.max(...allData) * 2;
+
+
     const datasets = [];
-    let colorIndex =0;
-    const labels = Object.keys(adat);
+    let labels;
     for (let i = 0; i < nevek.length; i++)
     {
-    const algoritmusNev =  Object.keys(rendezesek)[i];
-    const adat = rendezesek[algoritmusNev];
-    const listaMs = labels.map(e => adat[e][0]);
-    const tombMs = labels.map(e => adat[e][1]);
+        const algoritmusNev =  Object.keys(rendezesek)[i];
+        const adat = rendezesek[algoritmusNev];
+        labels = Object.keys(adat);
+        const listaMs = labels.map(e => adat[e][0]);
+        const tombMs = labels.map(e => adat[e][1]);
 
-    datasets.push(
-    {
-        label: nevek[i] +" (lista)",
-        datasets: listaMs,
-        backgroundColor: colors2[colorIndex],
+        datasets.push(
+        {
+            label: nevek[i] +" (lista)",
+            data: listaMs,
+            borderColor: colors1[i],
+            backgroundColor: colors1[i],
+            fill: false,
+            tension: 0.2
+        });
+
+        datasets.push(
+        {
+        label: nevek[i] + " (tömb)",
+        data: tombMs,
+        borderColor: colors1[i],
+        backgroundColor: colors1[i],
         fill: false,
+        borderDash: [5,5],
         tension: 0.2
-    });
-
-    colorIndex++;
-    d
+        });
     }
+
+    const ctx = document.getElementById("kozos");
+    new Chart(ctx, 
+    {
+        type: "line",
+        data:
+        {
+            labels: labels,
+            datasets: datasets
+        },
+        options:
+        {
+            responsive: true,
+            plugins:
+            {
+                title:
+                {
+                    display: true,
+                    text: "Algoritmusok futási ideje",
+                },
+                legend: {position: true}
+            },
+        
+            scales: 
+            {
+                y:
+                {
+                    type: "logarithmic",
+                    min: yMin,
+                    suggestedMax: 5000,
+                    beginAtZero: false,
+                    title:
+                    {
+                        display: true,
+                        text: "Futási idő (ms)"
+                    }
+                },
+                x: 
+                {
+                    title:
+                    {
+                        display: true,
+                        text: "Méret"
+                    }
+                }
+            }
+        }
+    });
 }
 
 async function init() {
@@ -987,13 +1059,14 @@ async function init() {
     {
         rajz(i);
     }
+    kozosRajz();
     //helyMeghatarozas();
 }
 
 document.addEventListener("DOMContentLoaded", init);
 
 //ezt ChatGPT csinálta, emiatt vannak középen a négyzetek
-window.onload = function () {
+function centerBoxes() {
     document.querySelectorAll('.anim-div').forEach(div => {
         const boxes = div.querySelectorAll('.anim');
         const boxWidth = 75;
@@ -1009,6 +1082,31 @@ window.onload = function () {
             box.style.top = startTop + "px";
         });
     });
+}
+
+window.onload = centerBoxes;
+window.onresize = centerBoxes; // <--- így újraszámolja
+
+
+
+
+
+//window.onload = function () {
+//    document.querySelectorAll('.anim-div').forEach(div => {
+//        const boxes = div.querySelectorAll('.anim');
+//        const boxWidth = 75;
+//        const boxHeight = 75;
+//        const gap = 15;
+//        const totalWidth = boxes.length * (boxWidth + gap) - gap;
+
+//        const startLeft = (div.offsetWidth - totalWidth) / 2;
+//        const startTop = (div.offsetHeight - boxHeight) / 2;
+
+//        boxes.forEach((box, i) => {
+//            box.style.left = (startLeft + i * (boxWidth + gap)) + "px";
+//            box.style.top = startTop + "px";
+//        });
+//    });
 
     //    document.querySelectorAll('.anim-div').forEach(div => {
     //    const boxes = div.querySelectorAll('.bucket');
@@ -1025,4 +1123,4 @@ window.onload = function () {
     //      box.style.top = startTop + "px";
     //    });
     //  });
-};
+//};

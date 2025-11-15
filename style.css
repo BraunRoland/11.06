@@ -45,6 +45,7 @@ footer{
 .anim{
     width: 75px;
     height: 75px;
+    gap: 15px;
     background-color: cyan;
     display: inline-block;
     position: absolute;
