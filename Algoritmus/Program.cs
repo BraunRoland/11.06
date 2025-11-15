@@ -1,13 +1,19 @@
-﻿namespace Algoritmus
+﻿using System.Diagnostics;
+
+namespace Algoritmus
 {
     internal class Program
     {
         static Random rnd = new Random();
         static int[] hossz = new int[] {10,100,500,1000,10000,50000};
         static string[] fajlNevek = new string[] {"Egyszeru","Bubble","Quick","Insertion","Radix"};
+        static Stopwatch stw = new Stopwatch();
 
-        static void SortEgyszeru()
+        static double[] SortEgyszeru()
         {
+            double[] meresek = new double[2];
+
+            stw.Start();
             for (int i = 0; i < tomb.Length - 1; i++)
             {
                 for (int j = i + 1; j < tomb.Length; j++)
@@ -20,10 +26,35 @@
                     }
                 }
             }
+            stw.Stop();
+            meresek[0] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            stw.Start();
+            for (int i = 0; i < lista.Length - 1; i++)
+            {
+                for (int j = i + 1; j < lista.Length; j++)
+                {
+                    if (lista[i] > lista[j])
+                    {
+                        int seged = lista[i];
+                        lista[i] = lista[j];
+                        lista[j] = seged;
+                    }
+                }
+            }
+            stw.Stop();
+            meresek[1] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            return meresek;
         }
 
-        static void SortBubble()
+        static double[] SortBubble()
         {
+            double[] meresek = new double[2];
+
+            stw.Start();
             for (int i = tomb.Length - 1; i > 0; i--)
             {
                 for (int j = 0; j < i; j++)
@@ -36,6 +67,27 @@
                     }
                 }
             }
+            stw.Stop();
+            meresek[0] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            stw.Start();
+            for (int i = lista.Length - 1; i > 0; i--)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (lista[j] > lista[j + 1])
+                    {
+                        int tmp = lista[j + 1];
+                        lista[j + 1] = lista[j];
+                        lista[j] = tmp;
+                    }
+                }
+            }
+            stw.Stop();
+            meresek[1] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+            return meresek;
         }
 
         static void SortQuick_Array(int also, int felso)
@@ -89,8 +141,11 @@
             
         }
 
-        static void SortInsertion()
+        static double[] SortInsertion()
         {
+            double[] meresek = new double[2];
+
+            stw.Start();
             for (int i = 1; i < tomb.Length; i++)
             {
                 int tmp = tomb[i];
@@ -103,6 +158,27 @@
                 }
                 tomb[j + 1] = tmp;
             }
+            stw.Stop();
+            meresek[0] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            stw.Start();
+            for (int i = 1; i < lista.Length; i++)
+            {
+                int tmp = lista[i];
+                int j = i - 1;
+
+                while (j >= 0 && lista[j] > tmp)
+                {
+                    lista[j + 1] = lista[j];
+                    j--;
+                }
+                lista[j + 1] = tmp;
+            }
+            stw.Stop();
+            meresek[1] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+            return meresek;
         }
 
         static void SortRadix_Array()
@@ -190,18 +266,15 @@
             return lista;
         }
 
-        static void Listak()
+        static void FileTorles()
         {
-            lista = [];
-            tomb = [];
-        }
-
-        static void FileTorles(string fajlNev)
-        {
-            string path = fajlNev+".txt";
+            for (int i = 0; i < fajlNevek.Length; i++)
+            {
+            string path = fajlNevek[i] +".txt";
             if (File.Exists(path))
             {
                 File.Delete(path);
+            }
             }
         }
 
@@ -224,6 +297,15 @@
         static void Main(string[] args)
         {
             FileTorles();
+            int[] tomb;
+            List<int> lista;
+            for (int i = 0; i < hossz.Length; i++)
+            {
+                tomb = TombFeltoltes(hossz[i]);
+                lista = Listafeltoltes(hossz[i]);
+
+
+            }
         }
     }
 }
