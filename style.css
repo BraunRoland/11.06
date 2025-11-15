@@ -36,6 +36,12 @@ footer{
     
 }
 
+#myChart{
+    max-width: 100%;
+    max-height: 700px;
+    margin-bottom: 200px;
+}
+
 .anim{
     width: 75px;
     height: 75px;

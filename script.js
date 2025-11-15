@@ -776,13 +776,11 @@ async function fajlBeolvasas()
                 for (let j = 0; j < lines.length; j++)
                 {
                     let segedLista = lines[j].split(";");
-                    rendezesek[key][segedLista[0]] = [segedLista[1], segedLista[3]]
+                    
+                    let listaIdo = parseFloat(segedLista[1].replace(",","."));
+                    let tombIdo = parseFloat(segedLista[3].replace(",","."));                    
+                    rendezesek[key][parseFloat(segedLista[0])] = [listaIdo, tombIdo]
                 }
-                //for (let j = 0; j < segedLista.length; j++)
-                //{
-                //    console.log(`${i}.sor: [${j}] - ${segedLista[j]}`)
-                //    rendezesek.nevek[i][]
-                //}
             }
             
         }
@@ -793,62 +791,111 @@ async function fajlBeolvasas()
 const rendezesek = {};
 
 /*
-const rendezesek = 
+rendezesek =
 {
-    egyszeru: {},
-    bubble: {},
-    quickSort:{},
-    insertion:{},
-    radix: {}   
-}
-*/
-/*
-const rendezesek = 
-{
-    //listaDb, listaMs, tombDb, tombMs
-    //{db: listaMs, tombMs}
-    egyszeru: 
-    [
-        [],
-        [],
-        [],
-        [],
-        []
-    ],
+    egyszeru:
+    {
+        100: [listaMs, tombMs],
+        500: [listaMs, tombMs],
+        1000: [listaMs, tombMs],
+        10000: [listaMs, tombMs],
+        50000: [listaMs, tombMs]
+    },
     bubble:
-    [
-        [],
-        [],
-        [],
-        [],
-        []
-    ],
+    {
+        100: [listaMs, tombMs],
+        500: [listaMs, tombMs],
+        1000: [listaMs, tombMs],
+        10000: [listaMs, tombMs],
+        50000: [listaMs, tombMs]
+    },
     quick:
-    [
-        [],
-        [],
-        [],
-        [],
-        []
-    ],
+    {
+        100: [listaMs, tombMs],
+        500: [listaMs, tombMs],
+        1000: [listaMs, tombMs],
+        10000: [listaMs, tombMs],
+        50000: [listaMs, tombMs]
+    },
     insertion:
-    [
-        [],
-        [],
-        [],
-        [],
-        []
-    ],
+    {
+        100: [listaMs, tombMs],
+        500: [listaMs, tombMs],
+        1000: [listaMs, tombMs],
+        10000: [listaMs, tombMs],
+        50000: [listaMs, tombMs]
+    },
     radix:
-    [
-        [],
-        [],
-        [],
-        [],
-        []
-    ]
+    {
+        100: [listaMs, tombMs],
+        500: [listaMs, tombMs],
+        1000: [listaMs, tombMs],
+        10000: [listaMs, tombMs],
+        50000: [listaMs, tombMs]
+    },
 }
 */
+
+function rajz()
+{
+    const ctx = document.getElementById('myChart');
+    const adat = rendezesek.egyszeru;
+    const labels = Object.keys(adat);
+    const listaMs = labels.map(e => adat[e][0]);
+    const tombMs = labels.map(e => adat[e][1]);
+
+    const data = 
+    {
+        labels: labels,
+        datasets:
+        [   
+            {
+                label: "Lista Mérés(ms)",
+                data: listaMs,
+                backgroundColor: "blue"
+            },
+            {
+                label: "Tömb mérés(ms)",
+                data: tombMs,
+                backgroundColor: 
+            }
+        ]
+    }
+
+    new Chart(ctx, 
+    {
+        type: 'bar',
+        data: data,
+        options: 
+        {
+            responsive: true,
+            plugins:
+            {
+                title:
+                {
+                    display: true,
+                    text: "Egyszerű"
+                }
+            },
+            scales:
+            {
+                y:
+                {
+                    beginAtZero: false,
+                    type: "logarithmic",
+                    min: 0.01,
+                    ticks:
+                    {
+                        callback: function(value)
+                        {
+                            return value;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
 
 async function init() {
     //rendezes();
@@ -858,7 +905,8 @@ async function init() {
     randomSzam(40, 101);
     randomSzam(50, 2001);
     await fajlBeolvasas();
-    console.log(rendezesek)
+    console.log(rendezesek);
+    rajz();
     //helyMeghatarozas();
 }
 
