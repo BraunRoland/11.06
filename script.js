@@ -202,12 +202,13 @@ async function egyszeru(sor)
     document.getElementById(lista[lista.length - 1].id).style.backgroundColor = "orange";
     console.log(`Egyszerű(rendezett): `);
     console.log(lista);
-    await sleep(2000);
+    await sleep(500);
     animacioFut = false;
 }
 
 async function bubbleSort(sor) 
 {
+    animacioFut = true;
     let lista = listaKeszites(sor);
     console.log(`bubble sort: `);
     console.log(lista);
@@ -240,12 +241,17 @@ async function bubbleSort(sor)
     document.getElementById(lista[0].id).style.backgroundColor = "orange";
     console.log(`bubble sort(rendezett): `);
     console.log(lista);
+    await sleep(500);
+    animacioFut = false;
 }
 
 async function quickSort_btn(sor) 
 {
+    animacioFut = true;
     let lista = listaKeszites(sor);
     quickSort(0, lista.length - 1, lista);
+    await sleep(500);
+    animacioFut = false;
 }
 
 async function quickSort(also, felso, lista) 
@@ -312,6 +318,7 @@ async function quickSort(also, felso, lista)
 
 async function insertionSort(sor) 
 {
+    animacioFut = true;
     let lista = listaKeszites(sor);
 
 
@@ -365,6 +372,8 @@ async function insertionSort(sor)
     }
     console.log("Insertion(rendezett): ")
     console.log(lista);
+    await sleep(500);
+    animacioFut = false;
 }
 
 function radixBal(negyzetId, vonalId, balra, db) 
@@ -570,6 +579,7 @@ async function radixMozgFel(negyzetId, kockakHelye, i)
 
 async function radixSort(sor) 
 {
+    animacioFut = true;
     let lista = listaKeszites(sor);
     let maxCount = mostDigits(lista);
 
@@ -731,6 +741,8 @@ async function radixSort(sor)
             document.getElementById(indexLista[i]).innerText = bucket.szamok[ind].szam[obj];
         }
     }
+    await sleep(500);
+    animacioFut = false;
 }
 
 //seged funkciók a radixSorthoz:
@@ -1088,47 +1100,12 @@ function centerBoxes() {
     });
 }
 
-window.onload = centerBoxes;
-window.onresize = centerBoxes; // <--- így újraszámolja
+window.onload = centerBoxes();
+window.onresize = centerBoxes();
 window.addEventListener("resize",() =>
 {
-  window.location.reload();  
-})
-
-
-
-
-
-//window.onload = function () {
-//    document.querySelectorAll('.anim-div').forEach(div => {
-//        const boxes = div.querySelectorAll('.anim');
-//        const boxWidth = 75;
-//        const boxHeight = 75;
-//        const gap = 15;
-//        const totalWidth = boxes.length * (boxWidth + gap) - gap;
-
-//        const startLeft = (div.offsetWidth - totalWidth) / 2;
-//        const startTop = (div.offsetHeight - boxHeight) / 2;
-
-//        boxes.forEach((box, i) => {
-//            box.style.left = (startLeft + i * (boxWidth + gap)) + "px";
-//            box.style.top = startTop + "px";
-//        });
-//    });
-
-    //    document.querySelectorAll('.anim-div').forEach(div => {
-    //    const boxes = div.querySelectorAll('.bucket');
-    //    const boxWidth = 75;
-    //    const boxHeight = 75;
-    //    const gap = 15;
-    //    const totalWidth = boxes.length * (boxWidth + gap) - gap;
-
-    //    const startLeft = (div.offsetWidth - totalWidth) / 2;
-    //    const startTop = (div.offsetHeight - boxHeight) / 2;
-
-    //    boxes.forEach((box, i) => {
-    //      box.style.left = (startLeft + i * (boxWidth + gap)) + "px";
-    //      box.style.top = startTop + "px";
-    //    });
-    //  });
-//};
+    if(animacioFut)
+    {
+        window.location.reload();  
+    }
+});
