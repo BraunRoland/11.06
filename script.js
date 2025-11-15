@@ -1,3 +1,4 @@
+
 function listaKeszites(sor) {
     document.getElementById(sor / 10).disabled = true;
     const lista = [];
@@ -835,6 +836,21 @@ rendezesek =
     },
 }
 */
+const Utils = 
+{
+    CHART_COLORS: {
+    red: 'rgb(250, 11, 63)',
+    orange: 'rgb(255, 159, 64)',
+    yellow: 'rgb(255, 205, 86)',
+    green: 'rgb(75, 192, 192)',
+    blue: 'rgb(54, 162, 235)',
+    purple: 'rgb(153, 102, 255)',
+    grey: 'rgb(201, 203, 207)'
+  },
+  transparentize: function(color, opacity) {
+    return color.replace('rgb(', 'rgba(').replace(')', `, ${1-opacity})`);
+  }
+};
 
 function rajz()
 {
@@ -852,12 +868,12 @@ function rajz()
             {
                 label: "Lista Mérés(ms)",
                 data: listaMs,
-                backgroundColor: "blue"
+                backgroundColor: 'rgba(5, 151, 248, 1)'
             },
             {
                 label: "Tömb mérés(ms)",
                 data: tombMs,
-                backgroundColor: 
+                backgroundColor: 'rgb(250, 11, 63)'
             }
         ]
     }
