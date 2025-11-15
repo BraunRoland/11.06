@@ -326,6 +326,7 @@ namespace Algoritmus
         static void Main(string[] args)
         {
             FileTorles();
+            bool boolean = true;
             for (int i = 0; i < hossz.Length; i++)
             {
                 int fajlIndex = 0;
@@ -335,16 +336,24 @@ namespace Algoritmus
                 lista = Listafeltoltes(hossz[i]);
 
                 //Egyszerű rendezés
-                FileIras(true, fajlNevek[fajlIndex], SortEgyszeru(tomb, lista), i);
+                FileIras(boolean, fajlNevek[fajlIndex], SortEgyszeru(tomb, lista), i);
                 fajlIndex++;
 
-                //Bubble rendezés
+                //Buborékos rendezés
+                FileIras(boolean, fajlNevek[fajlIndex], SortBubble(tomb, lista), i);
+                fajlIndex++;
 
+                //Gyors rendezés
+                FileIras(boolean, fajlNevek[fajlIndex], SortQuick(tomb, lista), i);
+                fajlIndex++;
 
+                //Beillesztéses rendezés
+                FileIras(boolean, fajlNevek[fajlIndex], SortInsertion(tomb, lista), i);
+                fajlIndex++;
 
-
-
-
+                //Radix rendezés
+                FileIras(boolean, fajlNevek[fajlIndex], SortRadix(tomb, lista), i);
+                boolean = false;
             }
         }
     }
