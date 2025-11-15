@@ -105,7 +105,70 @@
             }
         }
 
+        static void SortRadix_Array()
+        {
+            int n = tomb.Length;
 
+            int[] zeros = new int[n];
+            int[] ones = new int[n];
+            for (int bit = 0; bit < 32; bit++)
+            {
+                int zeroCount = 0;
+                int oneCount = 0;
+                for (int i = 0; i < n; i++)
+                {
+                    int bitValue = (tomb[i] >> bit) & 1;
+
+                    if (bitValue == 0)
+                    {
+                        zeros[zeroCount] = tomb[i];
+                        zeroCount++;
+                    }
+                    else
+                    {
+                        ones[oneCount] = tomb[i];
+                        oneCount++;
+                    }
+                }
+                int index = 0;
+                for (int i = 0; i < zeroCount; i++)
+                    tomb[index++] = zeros[i];
+
+                for (int i = 0; i < oneCount; i++)
+                    tomb[index++] = ones[i];
+            }
+        }
+
+        static void SortRadix_List()
+        {
+            for (int bit = 0; bit < 32; bit++)
+            {
+                List<int> zeros = new List<int>();
+                List<int> ones = new List<int>();
+
+                foreach (int num in lista)
+                {
+                    int bitValue = (num >> bit) & 1;
+
+                    if (bitValue == 0)
+                        zeros.Add(num);
+                    else
+                        ones.Add(num);
+                }
+                int index = 0;
+
+                foreach (int num in zeros)
+                    lista[index++] = num;
+
+                foreach (int num in ones)
+                    lista[index++] = num;
+            }
+        }
+
+        static void SortRadix()
+        {
+
+        }
 
         static void Listak()
         {
