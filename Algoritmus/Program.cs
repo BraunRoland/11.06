@@ -2,9 +2,9 @@
 {
     internal class Program
     {
-        static List<int> lista = new List<int>();
-        static int[] tomb = new int[] { };
         static Random rnd = new Random();
+        static int[] hossz = new int[] {10,100,500,1000,10000,50000};
+        static string[] fajlNevek = new string[] {"Egyszeru","Bubble","Quick","Insertion","Radix"};
 
         static void SortEgyszeru()
         {
@@ -170,15 +170,60 @@
 
         }
 
+        static int[] TombFeltoltes(int n)
+        {
+            int[] tomb = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                tomb[i] = rnd.Next(0, 100001);
+            }
+            return tomb;
+        }
+
+        static List<int> Listafeltoltes(int n)
+        {
+            List<int> lista = new List<int>();
+            for (int i = 0; i < n; i++)
+            {
+                lista.Add(rnd.Next(0, 100001));
+            }
+            return lista;
+        }
+
         static void Listak()
         {
             lista = [];
             tomb = [];
         }
 
+        static void FileTorles(string fajlNev)
+        {
+            string path = fajlNev+".txt";
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
+        static void FileIras(bool boolean, string fajlNev)
+        {
+            StreamWriter sw = new StreamWriter(fajlNev + ".txt", true);
+            if (boolean == true)
+            {
+                sw.WriteLine("Lista elemek száma;Lista mérésének ideje(ms);Tömb elemek száma;Tömb mérésének ideje(ms)");
+            }
+            else 
+            {
+                sw.WriteLine();
+            }
+            sw.Close();
+        }
+
+
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            FileTorles();
         }
     }
 }
