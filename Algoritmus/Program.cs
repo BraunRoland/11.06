@@ -9,7 +9,7 @@ namespace Algoritmus
         static string[] fajlNevek = new string[] {"Egyszeru","Bubble","Quick","Insertion","Radix"};
         static Stopwatch stw = new Stopwatch();
 
-        static double[] SortEgyszeru()
+        static double[] SortEgyszeru(int[] tomb, List<int> lista)
         {
             double[] meresek = new double[2];
 
@@ -31,9 +31,9 @@ namespace Algoritmus
             stw.Reset();
 
             stw.Start();
-            for (int i = 0; i < lista.Length - 1; i++)
+            for (int i = 0; i < lista.Count - 1; i++)
             {
-                for (int j = i + 1; j < lista.Length; j++)
+                for (int j = i + 1; j < lista.Count; j++)
                 {
                     if (lista[i] > lista[j])
                     {
@@ -50,7 +50,7 @@ namespace Algoritmus
             return meresek;
         }
 
-        static double[] SortBubble()
+        static double[] SortBubble(int[] tomb, List<int> lista)
         {
             double[] meresek = new double[2];
 
@@ -72,7 +72,7 @@ namespace Algoritmus
             stw.Reset();
 
             stw.Start();
-            for (int i = lista.Length - 1; i > 0; i--)
+            for (int i = lista.Count - 1; i > 0; i--)
             {
                 for (int j = 0; j < i; j++)
                 {
@@ -90,7 +90,7 @@ namespace Algoritmus
             return meresek;
         }
 
-        static void SortQuick_Array(int also, int felso)
+        static void SortQuick_Array(int also, int felso, int[] tomb)
         {
             int i = also, j = felso;
             int kozep = tomb[(felso + also) / 2];
@@ -109,11 +109,11 @@ namespace Algoritmus
                     --felso;
                 }
             }
-            if (also < j) SortQuick_Array(also, j);
-            if (i < felso) SortQuick_Array(i, felso);
+            if (also < j) SortQuick_Array(also, j, tomb);
+            if (i < felso) SortQuick_Array(i, felso, tomb);
         }
 
-        static void SortQuick_List(int also, int felso)
+        static void SortQuick_List(int also, int felso, List<int> lista)
         {
             int i = also, j = felso;
             int kozep = lista[(felso + also) / 2];
@@ -132,16 +132,31 @@ namespace Algoritmus
                     --felso;
                 }
             }
-            if (also < j) SortQuick_List(also, j);
-            if (i < felso) SortQuick_List(i, felso);
+            if (also < j) SortQuick_List(also, j, lista);
+            if (i < felso) SortQuick_List(i, felso, lista);
         }
 
-        static void SortQuick()
+        static double[] SortQuick(int[] tomb, List<int> lista)
         {
-            
+            double[] meresek = new double[2];
+
+            stw.Start();
+            SortQuick_Array(0, tomb.Length - 1, tomb);
+            stw.Stop();
+            meresek[0] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            stw.Start();
+            SortQuick_List(0, lista.Count - 1, lista);
+            stw.Stop();
+            meresek[1] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            return meresek;
+
         }
 
-        static double[] SortInsertion()
+        static double[] SortInsertion(int[] tomb, List<int> lista)
         {
             double[] meresek = new double[2];
 
@@ -163,7 +178,7 @@ namespace Algoritmus
             stw.Reset();
 
             stw.Start();
-            for (int i = 1; i < lista.Length; i++)
+            for (int i = 1; i < lista.Count; i++)
             {
                 int tmp = lista[i];
                 int j = i - 1;
@@ -181,7 +196,7 @@ namespace Algoritmus
             return meresek;
         }
 
-        static void SortRadix_Array()
+        static void SortRadix_Array(int[] tomb)
         {
             int n = tomb.Length;
 
@@ -215,7 +230,7 @@ namespace Algoritmus
             }
         }
 
-        static void SortRadix_List()
+        static void SortRadix_List(List<int> lista)
         {
             for (int bit = 0; bit < 32; bit++)
             {
@@ -241,9 +256,23 @@ namespace Algoritmus
             }
         }
 
-        static void SortRadix()
+        static double[] SortRadix(int[] tomb, List<int> lista)
         {
+            double[] meresek = new double[2];
 
+            stw.Start();
+            SortRadix_Array(tomb);
+            stw.Stop();
+            meresek[0] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            stw.Start();
+            SortRadix_List(lista);
+            stw.Stop();
+            meresek[1] = stw.Elapsed.TotalMilliseconds;
+            stw.Reset();
+
+            return meresek;
         }
 
         static int[] TombFeltoltes(int n)
@@ -278,7 +307,7 @@ namespace Algoritmus
             }
         }
 
-        static void FileIras(bool boolean, string fajlNev)
+        static void FileIras(bool boolean, string fajlNev, double[] meresek, int index)
         {
             StreamWriter sw = new StreamWriter(fajlNev + ".txt", true);
             if (boolean == true)
@@ -287,7 +316,7 @@ namespace Algoritmus
             }
             else 
             {
-                sw.WriteLine();
+                sw.WriteLine($"{hossz[index]};{meresek[1]};{hossz[index]};{meresek[0]}");
             }
             sw.Close();
         }
@@ -297,12 +326,23 @@ namespace Algoritmus
         static void Main(string[] args)
         {
             FileTorles();
-            int[] tomb;
-            List<int> lista;
             for (int i = 0; i < hossz.Length; i++)
             {
+                int fajlIndex = 0;
+                int[] tomb;
+                List<int> lista;
                 tomb = TombFeltoltes(hossz[i]);
                 lista = Listafeltoltes(hossz[i]);
+
+                //Egyszerű rendezés
+                FileIras(true, fajlNevek[fajlIndex], SortEgyszeru(tomb, lista), i);
+                fajlIndex++;
+
+                //Bubble rendezés
+
+
+
+
 
 
             }
