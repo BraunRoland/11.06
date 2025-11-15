@@ -161,6 +161,7 @@ async function mozgatasJobbra(kocka, koviKocka)
 
 async function egyszeru(sor) 
 {
+    animacioFut = true;
     let lista = listaKeszites(sor);
     console.log(`Egyszerű: `);
     console.log(lista);
@@ -201,6 +202,8 @@ async function egyszeru(sor)
     document.getElementById(lista[lista.length - 1].id).style.backgroundColor = "orange";
     console.log(`Egyszerű(rendezett): `);
     console.log(lista);
+    await sleep(2000);
+    animacioFut = false;
 }
 
 async function bubbleSort(sor) 
@@ -1065,6 +1068,7 @@ async function init() {
 
 document.addEventListener("DOMContentLoaded", init);
 
+let animacioFut = false;
 //ezt ChatGPT csinálta, emiatt vannak középen a négyzetek
 function centerBoxes() {
     document.querySelectorAll('.anim-div').forEach(div => {
@@ -1086,6 +1090,10 @@ function centerBoxes() {
 
 window.onload = centerBoxes;
 window.onresize = centerBoxes; // <--- így újraszámolja
+window.addEventListener("resize",() =>
+{
+  window.location.reload();  
+})
 
 
 
