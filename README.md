@@ -3,3 +3,4 @@ Kell még:
 - beágyazott videó
 - radix felfelé
 - styling
+- c# atnehzese
