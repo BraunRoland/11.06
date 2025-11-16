@@ -1066,7 +1066,7 @@ async function init() {
     randomSzam(20, 101);
     randomSzam(30, 101);
     randomSzam(40, 101);
-    randomSzam(50, 2001);
+   // randomSzam(50, 2001);
     await fajlBeolvasas();
     console.log(rendezesek);
     canvasCsinalas();

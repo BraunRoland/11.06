@@ -30,6 +30,7 @@ h3{
 .iframe{
     height: 100%;
     width: 50%;
+    margin-bottom: 75px;
 }
 
 footer{
@@ -48,7 +49,7 @@ footer{
 }
 
 .bucket{
-    margin-top: 650px;
+    margin-top: 850px;
     width: 75px;
     height: 2px;
     background-color: rgb(216, 45, 45);
@@ -56,6 +57,10 @@ footer{
     /*position: absolute;*/
     text-align: center;
     
+}
+
+.list{
+    text-align: start;
 }
 
 .myChart{
