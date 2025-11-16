@@ -1082,7 +1082,8 @@ document.addEventListener("DOMContentLoaded", init);
 
 let animacioFut = false;
 //ezt ChatGPT csinálta, emiatt vannak középen a négyzetek
-function centerBoxes() {
+function centerBoxes() 
+{
     document.querySelectorAll('.anim-div').forEach(div => {
         const boxes = div.querySelectorAll('.anim');
         const boxWidth = 75;
@@ -1100,8 +1101,8 @@ function centerBoxes() {
     });
 }
 
-window.onload = centerBoxes();
-window.onresize = centerBoxes();
+window.onload = centerBoxes;
+window.onresize = centerBoxes;
 window.addEventListener("resize",() =>
 {
     if(animacioFut)
