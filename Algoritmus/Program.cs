@@ -6,7 +6,7 @@ namespace Algoritmus
     internal class Program
     {
         static Random rnd = new Random();
-        static int[] hossz = new int[] {10,100,500,1000,10000,50000};
+        static int[] hossz = new int[] {10,100,500,1000,10000,50000,100000};
         static string[] fajlNevek = new string[] {"Egyszeru","Bubble","Quick","Insertion","Radix"};
         static Stopwatch stw = new Stopwatch();
 
@@ -330,6 +330,7 @@ namespace Algoritmus
             bool boolean = true;
             for (int i = 0; i < hossz.Length; i++)
             {
+                Console.WriteLine($"Feldolgozás alatt: {hossz[i]} elemek...");
                 int fajlIndex = 0;
                 int[] tomb;
                 List<int> lista;
@@ -355,7 +356,8 @@ namespace Algoritmus
                 //Radix rendezés
                 FileIras(boolean, fajlNevek[fajlIndex].ToLower(), SortRadix(tomb, lista), i);
                 boolean = false;
-            }   
+                Console.WriteLine($"Kész: {hossz[i]} elemek feldolgozva.");
+            }
         }
     }
 }

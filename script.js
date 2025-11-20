@@ -24,7 +24,7 @@ function randomSzam(id, maxSzam) {
 }
 
 function mozgatasFel(kocka) {
-    return new Promise(resolve => {
+    return new Promise(async resolve => {
 
         let negyzet = document.getElementById(kocka);
         let id = null;
@@ -32,10 +32,11 @@ function mozgatasFel(kocka) {
         let kezd = pos
         clearInterval(id);
         id = setInterval(frame, 5);
-        function frame() {
+        async function frame() {
             //console.log("pos: "+pos);
             if (pos == kezd - 200) {
                 clearInterval(id);
+                await sleep(200);
                 resolve();
             }
             else {
@@ -43,12 +44,13 @@ function mozgatasFel(kocka) {
                 negyzet.style.top = pos + "px";
             }
         }
+        //await sleep(200)
     });
 }
 
 function mozgatasLe(kocka) 
 {
-    return new Promise(resolve => 
+    return new Promise(async resolve => 
     {
         let negyzet = document.getElementById(kocka);
         let id = null;
@@ -56,11 +58,12 @@ function mozgatasLe(kocka)
         let kezd = pos
         clearInterval(id);
         id = setInterval(frame, 5);
-        function frame() 
+        async function frame() 
         {
             //console.log("pos: "+pos);
             if (pos == kezd + 200) {
                 clearInterval(id);
+                await sleep(200);
                 resolve();
             }
             else {
@@ -68,11 +71,12 @@ function mozgatasLe(kocka)
                 negyzet.style.top = pos + "px";
             }
         }
+        //await sleep(200);
     });
 }
 
 
-function mozgatasOldalra(balKockaId, jobbKockaId) 
+async function mozgatasOldalra(balKockaId, jobbKockaId) 
 {
     return new Promise(resolve => 
     {
@@ -85,11 +89,12 @@ function mozgatasOldalra(balKockaId, jobbKockaId)
         let jobbKezd = jobbPos;
         clearInterval(id);
         id = setInterval(frame, 5);
-        function frame() 
+        async function frame() 
         {
             if (balPos == jobbKezd && jobbPos == balKezd) 
             {
                 clearInterval(id);
+                await sleep(200);
                 resolve();
             }
             else 
@@ -101,6 +106,7 @@ function mozgatasOldalra(balKockaId, jobbKockaId)
                 //console.log(`bal: ${balKocka.style.left} jobb: ${jobbKocka.style.left}`)
             }
         }
+        //await sleep(200);
     });
 }
 
@@ -114,12 +120,13 @@ async function mozgatasBalra(kocka, koviKocka)
         let kezd = pos
         clearInterval(id);
         id = setInterval(frame, 5);
-        function frame() 
+        async function frame() 
         {
             //console.log("pos: "+pos);
             if (pos == kezd - 90) 
             {
                 clearInterval(id);
+                await sleep(200);
                 resolve();
             }
             else 
@@ -141,12 +148,13 @@ async function mozgatasJobbra(kocka, koviKocka)
         let kezd = pos
         clearInterval(id);
         id = setInterval(frame, 5);
-        function frame() 
+        async function frame() 
         {
             //console.log("pos: "+pos);
             if (pos == kezd + 90) 
             {
                 clearInterval(id);
+                await sleep(200);
                 resolve();
             }
             else 
@@ -337,12 +345,12 @@ async function insertionSort(sor)
 
         nezett.style.backgroundColor = "green";
         let csere = lista[i];
-        await sleep(1000);
+        //await sleep(1000);
         for (j = i - 1; j >= 0 && lista[j].szam > csere.szam; j--) {
             if (szamlalo == 0) 
             {
                 await mozgatasFel(nezettId);
-                await sleep(1500);
+                //await sleep(1500);
             }
             szamlalo++;
 
@@ -353,16 +361,16 @@ async function insertionSort(sor)
 
             console.log(`id: ${nagyobbId} | szám: ${lista[j].szam}`)
             await mozgatasBalra(nezettId, balPos);
-            await sleep(1500);
+            //await sleep(1500);
             await mozgatasJobbra(nagyobbId, jobbPos);
-            await sleep(1500);
+           // await sleep(1500);
             lista[j + 1] = lista[j];
         }
         if (i != 0 && szamlalo != 0) 
         {
             //console.log("balpos: " + balPos);
             await mozgatasLe(nezettId);
-            await sleep(1500);
+           // await sleep(1500);
         }
         lista[j + 1] = csere
         for (k = 0; k < i + 1; k++) 
@@ -1066,7 +1074,7 @@ async function init() {
     randomSzam(20, 101);
     randomSzam(30, 101);
     randomSzam(40, 101);
-   // randomSzam(50, 2001);
+    randomSzam(50, 2001);
     await fajlBeolvasas();
     console.log(rendezesek);
     canvasCsinalas();
